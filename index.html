@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#07111c" />
+  <meta name="description" content="DROPZONE — a neon-soaked, playable 3D battle royale. Drop in, gear up, and be the last one standing." />
+  <title>DROPZONE — Last one standing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script type="importmap">
+    {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"}}
+  </script>
+</head>
+<body>
+  <main id="game-shell">
+    <canvas id="game-canvas" aria-label="3D DROPZONE game"></canvas>
+    <div class="vignette"></div>
+    <header class="topbar"><a class="brand" href="#" aria-label="Dropzone home"><span class="brand-mark">D<span>Z</span></span><span class="brand-name">DROP<span>ZONE</span></span></a><div class="top-status"><span class="live-dot"></span> SECTOR 07 <i></i> ISLAND: NEON FALL</div><button id="sound-toggle" class="icon-button" aria-label="Toggle sound">♫ <span>SOUND ON</span></button></header>
+    <section id="menu-screen" class="screen menu-screen">
+      <div class="menu-copy"><div class="eyebrow"><span class="eyebrow-line"></span> SEASON 01 &nbsp;·&nbsp; THE LAST LIGHT</div><h1>DROP<br><span>ZONE</span></h1><p class="hero-sub">ONE ISLAND. NO BACKUP.<br><b>MAKE EVERY SHOT COUNT.</b></p><div class="menu-actions"><button id="play-button" class="primary-button"><span>DEPLOY</span><span class="button-arrow">↗</span></button><button id="loadout-button" class="secondary-button">OPERATORS <span>01</span></button></div><div class="menu-foot"><span class="keycap">W</span><span class="keycap">A</span><span class="keycap">S</span><span class="keycap">D</span><span class="menu-foot-label">MOVE</span><span class="foot-divider"></span><span class="mouse-icon">⌖</span><span class="menu-foot-label">AIM &amp; FIRE</span></div></div>
+      <div class="menu-side"><div class="season-card"><span class="card-label">CURRENT OPERATOR</span><div class="operator-mini"><div class="operator-emblem">07</div><div><strong>GHOST</strong><small>RECON · FIELD SPECIALIST</small></div><span class="online-tag">READY</span></div><div class="card-rule"></div><div class="season-info"><span>ISLAND STATUS</span><strong>LIVE DEPLOYMENT</strong><div class="status-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div><div class="menu-version">DROPZONE // PRE-SEASON BUILD 0.9.4</div></div>
+      <div class="menu-bottom"><span>© 2025 DROPZONE FRONTIER</span><span>YOUR MISSION: SURVIVE</span><span>PRESS <b>DEPLOY</b> TO DROP IN</span></div>
+    </section>
+    <section id="operator-screen" class="screen modal-screen hidden"><div class="modal-card"><button id="operator-close" class="close-button">×</button><div class="eyebrow">FIELD ROSTER / 01</div><h2>CHOOSE YOUR<br><span>OPERATOR</span></h2><div class="operator-choice selected"><div class="operator-portrait">07</div><div><b>GHOST</b><small>RECON · FIELD SPECIALIST</small><p>Fast on the move. Built to make the first shot count.</p></div><span class="selected-check">✓</span></div><div class="modal-note">MORE OPERATORS JOINING NEXT DROP</div></div></section>
+    <section id="pause-screen" class="screen modal-screen hidden"><div class="modal-card pause-card"><button id="resume-button" class="close-button">×</button><div class="eyebrow">DROPZONE / FIELD PAUSED</div><h2>TAKE A<br><span>BREATHER.</span></h2><p>You're still in the fight. The zone won't wait forever.</p><button id="resume-action" class="primary-button"><span>BACK TO THE ISLAND</span><span class="button-arrow">↗</span></button><div class="pause-controls">WASD MOVE &nbsp;·&nbsp; MOUSE AIM &nbsp;·&nbsp; SPACE JUMP &nbsp;·&nbsp; ESC RESUME</div></div></section>
+    <section id="result-screen" class="screen modal-screen hidden"><div class="modal-card result-card"><div class="eyebrow" id="result-eyebrow">MATCH COMPLETE / SECTOR 07</div><h2 id="result-title">BETTER<br><span>LUCK NEXT TIME.</span></h2><p id="result-copy">The island always gets another shot.</p><div class="result-stats"><div><small>ELIMINATIONS</small><b id="result-kills">00</b></div><div><small>PLACEMENT</small><b id="result-place">#24</b></div><div><small>SURVIVAL</small><b id="result-time">00:00</b></div></div><button id="again-button" class="primary-button"><span>DROP AGAIN</span><span class="button-arrow">↗</span></button></div></section>
+    <section id="hud" class="hud hidden" aria-live="polite">
+      <div class="hud-top-left"><div class="match-chip"><span class="live-dot"></span><span>LIVE MATCH</span></div><div class="zone-chip"><span class="zone-icon">◉</span><span id="zone-label">SAFE ZONE</span><strong id="storm-clock">02:00</strong></div></div>
+      <div class="hud-top-center"><div class="location-name" id="location-name">NEON FALL</div><div class="location-sub">ISLAND SECTOR 07</div></div>
+      <div class="hud-top-right"><div class="alive-card"><span class="alive-icon">♙</span><div><b id="alive-count">25</b><small>PLAYERS LEFT</small></div></div><div class="kill-card"><span>✕</span><div><b id="kill-count">0</b><small>ELIMS</small></div></div><button id="pause-button" class="hud-pause" aria-label="Pause">Ⅱ</button></div>
+      <div class="drop-banner" id="drop-banner"><span class="drop-icon">⌄</span><div><b>DROP IN, OPERATOR</b><small>LAND AND KIT UP</small></div><span class="drop-timer" id="drop-timer">03</span></div>
+      <div class="crosshair"><i></i><i></i><i></i><i></i><span></span></div>
+      <div class="hit-marker" id="hit-marker">×</div><div class="damage-vignette" id="damage-vignette"></div>
+      <div class="feed" id="feed"></div>
+      <div class="hud-bottom-left"><div class="vitals"><div class="vital-row"><span class="vital-symbol">＋</span><div class="bar-track"><div id="health-fill" class="bar-fill health-fill"></div></div><b id="health-value">100</b></div><div class="vital-row"><span class="vital-symbol shield-symbol">⬡</span><div class="bar-track"><div id="shield-fill" class="bar-fill shield-fill"></div></div><b id="shield-value">50</b></div></div><div class="compass"><span>NW</span><i></i><b id="compass-degree">N 000°</b><i></i><span>NE</span></div></div>
+      <div class="hud-bottom-right"><div class="weapon-panel"><div class="weapon-heading"><span id="weapon-rarity" class="rarity-tag">COMMON</span><span id="weapon-type">ASSAULT RIFLE</span></div><div class="weapon-main"><div class="weapon-art" id="weapon-art"><div class="gun-shape"><i></i><i></i><i></i><b></b><em></em></div></div><div class="ammo-display"><div><b id="ammo-current">30</b><span>/</span><span id="ammo-reserve">120</span></div><small id="reload-state">FULL AUTO</small></div></div><div class="inventory"><div class="inventory-slot active" data-slot="0"><span class="slot-number">1</span><div class="slot-icon rifle-icon">╱</div></div><div class="inventory-slot" data-slot="1"><span class="slot-number">2</span><div class="slot-icon">⌁</div></div><div class="inventory-slot" data-slot="2"><span class="slot-number">3</span><div class="slot-icon">✚</div></div><div class="inventory-slot" data-slot="3"><span class="slot-number">4</span><div class="slot-icon">⬡</div></div><div class="inventory-slot" data-slot="4"><span class="slot-number">5</span><div class="slot-icon">▣</div></div></div></div></div>
+      <div class="pickup-prompt hidden" id="pickup-prompt"><span class="keycap">E</span><span>PICK UP</span><b id="pickup-name">RARE WEAPON</b></div>
+      <div class="reload-indicator hidden" id="reload-indicator"><span>RELOADING</span><div class="reload-bar"><i id="reload-progress"></i></div></div>
+      <div class="minimap-frame"><canvas id="minimap" width="180" height="180"></canvas><div class="map-north">N</div><div class="map-label">NEON FALL <span>·</span> SECTOR 07</div></div>
+      <div class="controls-hint"><span>WASD</span> MOVE <span>SHIFT</span> SPRINT <span>SPACE</span> JUMP <span>C</span> SLIDE <span>R</span> RELOAD</div>
+    </section>
+    <div id="toast" class="toast"></div>
+    <div id="interaction-overlay" class="interaction-overlay hidden"><div class="interaction-message">CLICK TO RESUME</div></div>
+  </main>
+  <script type="module" src="game.js"></script>
+</body>
+</html>
